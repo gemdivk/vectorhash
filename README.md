@@ -73,9 +73,9 @@ These should be placed inside: `screenshots/`
 
 | Screenshot         | Path                                 | Description                                         |
 | ------------------ | ------------------------------------ | --------------------------------------------------- |
-| ✅ Terminal log     | `screenshots/tx_terminal_output.png` | Shows full TX hash, hash value, block number        |
-| ✅ Block details    | `screenshots/block.png`      | Screenshot of block `#3836337` on Holesky Etherscan |
-| ✅ Transaction page | `screenshots/tx.png`   | Transaction detail from Etherscan (confirmed TX)    |
+| ✅ Terminal log     | `![screen](screenshots/tx_terminal_output.png)` | Shows full TX hash, hash value, block number        |
+| ✅ Block details    | `![screen](screenshots/block.png)`      | Screenshot of block `#3836337` on Holesky Etherscan |
+| ✅ Transaction page | `![screen](screenshots/tx.png)`   | Transaction detail from Etherscan (confirmed TX)    |
 
 ---
 
