@@ -1,164 +1,108 @@
-## 🚀 Getting Started
+# 🇰🇿 On-Chain Knowledge Base for Kazakhstan’s Constitution AI Assistant
 
-### ✅ Prerequisites
-
-- macOS with **Homebrew**
-- Python 3.9+
-- [Ollama](https://ollama.com) installed
+This project extends a Constitution QA assistant using LangChain and Ollama by storing semantic vector hashes on the **Ethereum Holesky testnet** using a **Solidity smart contract**.
 
 ---
 
-### 📦 Step-by-Step Installation
+## 🧠 Project Overview
 
-#### 1. Install Ollama + Models
-
-```bash
-brew install ollama
-
-ollama pull llama3
-ollama pull nomic-embed-text
-
----
-
-# 🇰🇿 Kazakhstan Constitution AI Assistant (Local LLM with Ollama)
-
-An AI-powered assistant that can **answer questions about the Constitution of the Republic of Kazakhstan** using uploaded PDF documents. This app uses **open-source, local language models** (like LLaMA3 via Ollama) and runs entirely **offline** on your Mac.
+| Feature | Description |
+|--------|-------------|
+| LLM Assistant | Answers questions about the Constitution using RAG |
+| Vector DB | ChromaDB (off-chain embeddings) |
+| Blockchain | Ethereum (Holesky testnet) |
+| On-chain storage | Hashed vectors using keccak256 stored via Solidity |
 
 ---
 
-## 📸 Screenshots
+## 🛠 Tech Stack
 
-> _Add your screenshots into a `/screenshots` folder and update paths below._
-
-### ❓ Ask Questions
-![Ask Questions](screenshots/screen1.png)
-
-### 📥 Upload PDFs
-![PDF Upload](screenshots/screen2.png)
-
-### ❓ Ask Questions regarding uploaded pdf
-![Ask Questions+PDF](screenshots/screen3.png)
+- Python
+- Streamlit (chat interface)
+- LangChain + Ollama (`llama3`, `nomic-embed-text`)
+- Solidity smart contract (deployed on Holesky)
+- `web3.py` for blockchain interaction
 
 ---
 
-## ✨ Features
+## ⚙️ How It Works
 
-- 🧠 Powered by local Large Language Models (e.g., `llama3`, `mistral`, etc.)
-- 🗂 Upload multiple PDF documents (e.g., Constitution, laws, references)
-- 🤖 Ask natural language questions about the content
-- 🔍 Retrieves relevant text chunks using vector similarity
-- 💬 Conversational memory (retains chat history)
-- 💾 Stores embeddings in persistent ChromaDB
-- 🌐 Simple and clean Streamlit-based UI
+1. User uploads Constitution PDFs
+2. Assistant splits and embeds text into vectors
+3. Vectors are stored locally in ChromaDB
+4. Each embedding is hashed (keccak256) for compactness
+5. The hash + document title are stored on-chain
 
 ---
 
-## 🛠 Technologies Used
+## 📦 Smart Contract
 
-| Component         | Tool                            |
-|------------------|---------------------------------|
-| LLM              | [`Ollama`](https://ollama.com)  |
-| Embeddings       | `nomic-embed-text` (Ollama)     |
-| Retrieval        | `ChromaDB`                      |
-| UI               | `Streamlit`                     |
-| Document Parsing | `LangChain` + `PyPDFLoader`     |
+**`blockchain/ConstitutionVectors.sol`**
 
----
-
-## 🚀 Getting Started
-
-### ✅ Prerequisites
-
-- macOS with **Homebrew**
-- Python 3.9+
-- [Ollama](https://ollama.com) installed
-
----
-
-### 📦 Step-by-Step Installation
-
-#### 1. Install Ollama + Models
-
-```bash
-brew install ollama
-
-ollama pull llama3
-ollama pull nomic-embed-text
+```solidity
+function storeVector(string memory docTitle, bytes32 embeddingHash) public;
+function getVector(uint id) public view returns (string memory, bytes32);
 ````
 
-#### 2. Clone This Repository
+---
 
-```bash
-git clone https://github.com/gemdivk/kazakhstan-ai-assistant.git
-cd kazakhstan-ai-assistant
-```
+## 🔗 Transaction Details
 
-#### 3. Set Up Python Environment
+| Info             | Value                                                                                                                 |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Chain            | Holesky Testnet (chainId: 17000)                                                                                      |
+| Contract Address | `0xb7b8C3D04150f9A53262c35Cc98afA6315C7b975`                                                                          |
+| TX Hash          | [`0xeb03...7ce0`](https://holesky.etherscan.io/tx/0xeb03292717e6c7a31caa9cbacbd83a5561b48c7a5ca3a8a256e8d7bf44567ce0) |
+| Block            | [`#3836337`](https://holesky.etherscan.io/block/3836337)                                                              |
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
+---
 
-#### 4. Start Ollama Server (in a separate terminal)
+## 💾 Sample Python Script
 
-```bash
-ollama serve
-```
+This script:
 
-#### 5. Launch the Streamlit App
+* Loads `.env` config
+* Builds and signs a TX to `storeVector()`
+* Prints transaction and block info
 
-```bash
-streamlit run app.py
+---
+
+## 🖼 Screenshots (Proof)
+
+These should be placed inside: `screenshots/`
+
+| Screenshot         | Path                                 | Description                                         |
+| ------------------ | ------------------------------------ | --------------------------------------------------- |
+| ✅ Terminal log     | `screenshots/tx_terminal_output.png` | Shows full TX hash, hash value, block number        |
+| ✅ Block details    | `screenshots/block.png`      | Screenshot of block `#3836337` on Holesky Etherscan |
+| ✅ Transaction page | `screenshots/tx.png`   | Transaction detail from Etherscan (confirmed TX)    |
+
+---
+
+## ✅ Submission Checklist
+
+* [x] Deployed Solidity smart contract
+* [x] Embedded Constitution text
+* [x] Stored vector hash on Holesky
+* [x] Proof via terminal and blockchain explorer
+* [x] `.env` (NOT pushed — safe example included)
+
+---
+
+## 🧪 Example `.env` (DO NOT push real keys)
+
+```env
+PRIVATE_KEY=0xYOUR_TEST_PRIVATE_KEY
+WALLET_ADDRESS=0xYOUR_WALLET
+HOLESKY_RPC=https://ethereum-holesky-rpc.publicnode.com
+CONTRACT_ADDRESS=0xYOUR_CONTRACT_ADDRESS
 ```
 
 ---
 
-## 🧪 How to Use
+## 🐈‍⬛ Author
 
-1. Go to [http://localhost:8501](http://localhost:8501)
-2. Upload one or more **PDF files** (Constitution, legal docs, etc.)
-3. Wait for: ✅ `Documents uploaded and indexed.`
-4. Enter a question like:
+* Name: Kamila Kanafina SE-2324
+* Project: Blockchain AI Assistant for Kazakhstan’s Constitution
+* University: Astana IT University
 
-> ❓ *What is the official language of Kazakhstan?*
-
-> 🧠 *AI will search your documents and respond contextually.*
-
----
-
-## 📁 Project Structure
-
-```
-kazakhstan-ai-assistant/
-├── app.py                # Main Streamlit app
-├── requirements.txt      # Python dependencies
-├── chroma_db/            # Vector DB (auto-created)
-├── screenshots/          # Screenshots for README
-└── README.md             # Project documentation
-```
-
----
-
-## 💡 Tips
-
-* Use smaller models like `mistral` for faster results.
-* Use `nomic-embed-text` for much faster embeddings than LLMs like `llama3`.
-* All processing happens **locally** – no API keys or internet needed.
-* Indexing large PDFs may take time. Add spinner for better UX.
-
----
-
-## 📜 License
-
-MIT License — free for academic, personal, or commercial use.
-
----
-
-## 🙋‍♂️ Author
-
-Built by \Kamila Kanafina SE-2324, Abdyhalyk Dias SE-2322 — powered by 💻 LangChain, 🧠 Ollama, and 🇰🇿 Kazakhstan’s Constitution.
-
-````
-# vectorhash
